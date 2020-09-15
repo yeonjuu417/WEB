@@ -1,16 +1,38 @@
 const { exec } = require("child_process");
 const https = require("https");
-const { URCLASS_URL, ASSESSMENT_ID, TRAVIS_PULL_REQUEST_SLUG } = process.env;
+const { readFileSync } = require("fs");
+const {
+  URCLASS_URL,
+  URCLASS_KEY,
+  ASSESSMENT_ID,
+  TRAVIS_PULL_REQUEST_SLUG
+} = process.env;
+
+if (URCLASS_KEY === "\n") {
+  throw new Error("urclass key is missing");
+}
 
 if (TRAVIS_PULL_REQUEST_SLUG === "\n") {
   throw new Error("github username is missing");
 }
 
+
 exec(
-  "NODE_ENV=test mocha --require @babel/register '**/__tests__/**/*.test.js' --reporter mochawesome --reporter-options reportDir='./',reportFilename=results,html=false && npm run submit",
-  (err, json, stderr) => {
-    console.log(err, json);
-    const result = JSON.parse(json);
+  "npx lerna run report",
+  (err, stdout, stderr) => {
+    let resultServer = readFileSync('./packages/server/report.json').toString()
+    let resultClient = readFileSync('./packages/client/report.json').toString()
+    let parsedServer = JSON.parse(resultServer)
+    let parsedClient = JSON.parse(resultClient)
+    let result = {
+      stats: {
+        "suites": parsedServer.stats.suites + parsedClient.stats.suites,
+        "tests": parsedServer.stats.tests + parsedClient.stats.tests,
+        "passes": parsedServer.stats.passes + parsedClient.stats.passes,
+        "pending": parsedServer.stats.pending + parsedClient.stats.pending,
+        "failures": parsedServer.stats.failures + parsedClient.stats.failures
+      }
+    }
     const username = TRAVIS_PULL_REQUEST_SLUG.split("/")[0];
 
     const options = {
@@ -28,7 +50,7 @@ exec(
     const body = {
       assessment_id: ASSESSMENT_ID,
       githubUsername: username,
-      type: "jest",
+      type: "mocha",
       result: result,
     };
 

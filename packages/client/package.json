@@ -14,7 +14,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "mocha --require @babel/register '__tests__/client.test.js'"
+    "test": "mocha --require @babel/register '__tests__/client.test.js'",
+    "report": "mocha --require @babel/register '__tests__/client.test.js' --reporter @mochajs/json-file-reporter"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -33,6 +34,7 @@
   },
   "devDependencies": {
     "@babel/register": "^7.11.5",
+    "@mochajs/json-file-reporter": "^1.2.1",
     "chai": "^4.2.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.4",

@@ -5,7 +5,7 @@
   "scripts": {
     "postinstall": "lerna bootstrap",
     "test": "lerna run test",
-    "submit": ""
+    "submit": "node ./.travis/submit.js"
   },
   "devDependencies": {
     "lerna": "^3.22.1"
