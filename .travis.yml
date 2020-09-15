@@ -1,0 +1,10 @@
+language: node_js
+node_js:
+  - 'stable'
+services:
+  - mysql
+before_script:
+  - mysql -u root --password="" -e "CREATE DATABASE ha_advanced;"
+  - cd packages/server
+  - npx sequelize-cli db:migrate
+  - cd ../..
