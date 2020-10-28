@@ -24,7 +24,6 @@ exec(
     try {
       resultServer = readFileSync('./packages/server/report.json')
       resultServer = resultServer.toString()
-      unlinkSync('./packages/server/report.json')
       ps = JSON.parse(resultServer)
     }
     catch {
@@ -34,7 +33,6 @@ exec(
     try {
       resultClient = readFileSync('./packages/client/report.json')
       resultClient = resultClient.toString()
-      unlinkSync('./packages/client/report.json')
       pc = JSON.parse(resultClient)
     }
     catch {

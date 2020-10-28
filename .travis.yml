@@ -12,5 +12,5 @@ before_script:
 env:
   - DATABASE_USERNAME=root DATABASE_NAME='ha_advanced'
 after_script:
-  - cd packages/server && npx pm2 stop index.js && cd ../..
   - npm run submit
+  - cd packages/server && npx pm2 stop index.js && cd ../..
