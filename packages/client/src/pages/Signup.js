@@ -1,5 +1,8 @@
 import React from "react";
 import { withRouter, Link } from "react-router-dom";
+import axios from "axios";
+
+axios.defaults.withCredentials = true;
 class Signup extends React.Component {
   constructor(props) {
     super(props);
@@ -11,81 +14,61 @@ class Signup extends React.Component {
     };
     this.handleInputValue = this.handleInputValue.bind(this);
   }
+
   handleInputValue = (key) => (e) => {
     this.setState({ [key]: e.target.value });
   };
+
+  handleSignup = () => {
+    // TODO : 서버에 회원가입을 요청 후 로그인 페이지로 이동 하세요.
+    // 회원 가입 성공 후 로그인 페이지 이동은 다음 코드를 이용하세요
+    // 
+    // this.props.history.push("/");
+    
+  }
+
   render() {
     return (
       <div>
         <center>
           <h1>Sign Up</h1>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              // TODO : 서버에 회원가입을 요청 후 로그인 페이지로 이동 하세요.
-            }}
-          >
+          <form onSubmit={(e) => e.preventDefault()}>
+            <div>모든 항목은 필수입니다</div>
             <div>
+              <span>이메일</span>
               <input
-                style={{
-                  width: "400px",
-                  height: "30px",
-                  margin: "5px",
-                  borderRadius: "5px",
-                }}
                 type="email"
-                placeholder="이메일을 입력 해주세요"
                 onChange={this.handleInputValue("email")}
               ></input>
             </div>
             <div>
+              <span>비밀번호</span>
               <input
-                style={{
-                  width: "400px",
-                  height: "30px",
-                  margin: "5px",
-                  borderRadius: "5px",
-                }}
-                onChange={this.handleInputValue("password")}
                 type="password"
-                placeholder="비밀번호를 입력 해주세요"
+                onChange={this.handleInputValue("password")}
               ></input>
             </div>
             <div>
+              <span>이름</span>
               <input
-                style={{
-                  width: "195px",
-                  height: "30px",
-                  margin: "5px",
-                  borderRadius: "5px",
-                }}
+                type='text'
                 onChange={this.handleInputValue("username")}
-                placeholder="이름"
-              ></input>
-              <input
-                style={{
-                  width: "195px",
-                  height: "30px",
-                  margin: "5px",
-                  borderRadius: "5px",
-                }}
-                type="mobile"
-                onChange={this.handleInputValue("mobile")}
-                placeholder="전화번호"
               ></input>
             </div>
             <div>
-              <Link to="/login">이미 아이디가 있으신가요?</Link>
+              <span>전화번호</span>
+              <input
+                type='tel'
+                onChange={this.handleInputValue("mobile")}
+              ></input>
+            </div>
+            <div>
+              <Link to='/login'>이미 아이디가 있으신가요?</Link>
             </div>
             <button
-              style={{
-                width: "200px",
-                height: "30px",
-                margin: "5px",
-                borderRadius: "5px",
-                backgroundColor: "skyblue",
-              }}
-              type="submit"
+              className="btn btn-signup"
+              type='submit'
+              onClick={this.handleSignup}
             >
               회원가입
             </button>
@@ -96,4 +79,4 @@ class Signup extends React.Component {
   }
 }
 
-export default Signup;
+export default withRouter(Signup);

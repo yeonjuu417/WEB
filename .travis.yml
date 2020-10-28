@@ -1,12 +1,16 @@
 language: node_js
 node_js:
-  - 'stable'
+  - 'lts/*'
 services:
   - mysql
 before_script:
   - mysql -u root --password="" -e "CREATE DATABASE ha_advanced;"
   - cd packages/server
   - npx sequelize-cli db:migrate
+  - npx pm2 start index.js
   - cd ../..
+env:
+  - DATABASE_USERNAME=root DATABASE_NAME='ha_advanced'
 after_script:
+  - cd packages/server && npx pm2 stop index.js && cd ../..
   - npm run submit

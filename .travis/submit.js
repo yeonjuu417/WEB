@@ -18,19 +18,36 @@ if (TRAVIS_PULL_REQUEST_SLUG === "\n") {
 
 
 exec(
-  "npx lerna run report",
+  "npx lerna run --no-bail report --stream",
   (err, stdout, stderr) => {
-    let resultServer = readFileSync('./packages/server/report.json').toString()
-    let resultClient = readFileSync('./packages/client/report.json').toString()
-    let parsedServer = JSON.parse(resultServer)
-    let parsedClient = JSON.parse(resultClient)
+    let resultServer, resultClient, ps, pc;
+    try {
+      resultServer = readFileSync('./packages/server/report.json')
+      resultServer = resultServer.toString()
+      unlinkSync('./packages/server/report.json')
+      ps = JSON.parse(resultServer)
+    }
+    catch {
+      ps = {}
+    }
+
+    try {
+      resultClient = readFileSync('./packages/client/report.json')
+      resultClient = resultClient.toString()
+      unlinkSync('./packages/client/report.json')
+      pc = JSON.parse(resultClient)
+    }
+    catch {
+      pc = {}
+    }
+
     let result = {
       stats: {
-        "suites": parsedServer.stats.suites + parsedClient.stats.suites,
-        "tests": parsedServer.stats.tests + parsedClient.stats.tests,
-        "passes": parsedServer.stats.passes + parsedClient.stats.passes,
-        "pending": parsedServer.stats.pending + parsedClient.stats.pending,
-        "failures": parsedServer.stats.failures + parsedClient.stats.failures
+        "suites": (ps.stats.suites || 0) + (pc.stats.suites || 0),
+        "tests": (ps.stats.tests || 0) + (pc.stats.tests || 0),
+        "passes": (ps.stats.passes || 0) + (pc.stats.passes || 0),
+        "pending": (ps.stats.pending || 0) + (pc.stats.pending || 0),
+        "failures": (ps.stats.failures || 0) + (pc.stats.failures || 0)
       }
     }
     const username = TRAVIS_PULL_REQUEST_SLUG.split("/")[0];

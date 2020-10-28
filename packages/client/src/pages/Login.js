@@ -1,5 +1,9 @@
 import React from "react";
-import { Link, Route, withRouter } from "react-router-dom";
+import '../App.css';
+import { Link, withRouter } from "react-router-dom";
+import axios from "axios";
+
+axios.defaults.withCredentials = true;
 
 class Login extends React.Component {
   constructor(props) {
@@ -14,40 +18,28 @@ class Login extends React.Component {
   handleInputValue = (key) => (e) => {
     this.setState({ [key]: e.target.value });
   };
+  handleLogin = () => {
+    // TODO : 서버에 로그인을 요청하고, props로 전달된 callback을 호출합니다
+
+  }
   render() {
+
     return (
       <div>
         <center>
           <h1>Sign In</h1>
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              // TODO : 서버에 로그인 요청 후 처리하세요.
-            }}
-          >
+          <form onSubmit={(e) => e.preventDefault()}>
             <div>
+              <span>이메일</span>
               <input
-                style={{
-                  width: "400px",
-                  height: "30px",
-                  margin: "5px",
-                  borderRadius: "5px",
-                }}
                 type="email"
-                placeholder="이메일을 입력 해주세요"
                 onChange={this.handleInputValue("email")}
               ></input>
             </div>
             <div>
+              <span>비밀번호</span>
               <input
-                style={{
-                  width: "400px",
-                  height: "30px",
-                  margin: "5px",
-                  borderRadius: "5px",
-                }}
                 type="password"
-                placeholder="비밀번호를 입력 해주세요"
                 onChange={this.handleInputValue("password")}
               ></input>
             </div>
@@ -55,14 +47,9 @@ class Login extends React.Component {
               <Link to="/signup">아직 아이디가 없으신가요?</Link>
             </div>
             <button
-              style={{
-                width: "200px",
-                height: "30px",
-                margin: "5px",
-                borderRadius: "5px",
-                backgroundColor: "skyblue",
-              }}
+              className="btn btn-login"
               type="submit"
+              onClick={this.handleLogin}
             >
               로그인
             </button>
@@ -73,4 +60,4 @@ class Login extends React.Component {
   }
 }
 
-export default Login;
+export default withRouter(Login);

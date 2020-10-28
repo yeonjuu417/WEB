@@ -84,7 +84,7 @@ describe("Advanced Web Hiring Assessments - Server", () => {
         });
 
         expect(response.status).to.eql(404);
-        expect(response.text).to.eql("unvalid user");
+        expect(response.text).to.eql("invalid user");
       });
     });
 
@@ -97,15 +97,10 @@ describe("Advanced Web Hiring Assessments - Server", () => {
           mobile: "010-0987-6543",
         });
         expect(response.status).to.eql(201);
-        expect(response.body).to.haveOwnPropertyDescriptor(
-          "id",
-          "username",
-          "email",
-          "mobile"
-        );
+        expect(response.body).to.haveOwnPropertyDescriptor("id", "username", "email", "mobile");
       });
 
-      it("it should 409(conflict) status code with existing user email", async () => {
+      it("it should respond with 409(conflict) status code with existing user email", async () => {
         const response = await agent.post("/signup").send({
           username: "hoyong",
           email: "hoyong@codestates.com",
@@ -114,6 +109,45 @@ describe("Advanced Web Hiring Assessments - Server", () => {
         });
         expect(response.status).to.eql(409);
         expect(response.text).to.eql("email exists");
+      });
+
+      it("it should respond with 422(unprocessable entity) status code when any one of username, email, password, or mobile parameter is not supplied", async () => {
+        const fakeUser = {
+          username: "hoyong",
+          email: "hoyong@codestates.com",
+          password: "password",
+          mobile: "010-1234-5678",
+        };
+
+        async function multipleSignupRequest(user) {
+          const keyList = Object.keys(user);
+          const result = [];
+
+          for (let i = 0; i < keyList.length; i++) {
+            const oneParameterMissingUser = {};
+            keyList
+              .filter((key) => key !== keyList[i])
+              .forEach((key) => (oneParameterMissingUser[key] = user[key]));
+            const response = await agent.post("/signup").send(oneParameterMissingUser);
+            result.push(response);
+          }
+          return result;
+        }
+
+        const fakeUserAttempts = await multipleSignupRequest(fakeUser);
+
+        fakeUserAttempts.forEach((attempt) => {
+          expect(attempt.status).to.eql(422);
+          expect(attempt.text).to.eql("insufficient parameters supplied");
+        });
+      });
+    });
+
+    describe("POST /signout", () => {
+      it("it should respond with 205 status code", async () => {
+        const response = await agent.post("/signout")
+        expect(response.status).to.eql(205);
+        expect(response.text).to.eql("Logged out successfully");
       });
     });
 
@@ -132,12 +166,7 @@ describe("Advanced Web Hiring Assessments - Server", () => {
       it("it should return user data with request of session.userid", (done) => {
         authenticatedUser.get("/user").end(function (err, res2) {
           expect(res2.status).to.eql(200);
-          expect(res2.body).to.haveOwnPropertyDescriptor(
-            "id",
-            "email",
-            "username",
-            "mobile"
-          );
+          expect(res2.body).to.haveOwnPropertyDescriptor("id", "email", "username", "mobile");
           done();
         });
       });

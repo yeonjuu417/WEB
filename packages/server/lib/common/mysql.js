@@ -1,7 +1,5 @@
 const dotenv = require("dotenv");
 const mysql = require("mysql");
-const env = process.env.NODE_ENV || "development";
-const config = require("../../config/config.json")[env];
 
 dotenv.config();
 
@@ -20,10 +18,10 @@ module.exports = class DatabaseConnector extends SingletonBase {
   constructor() {
     super();
     this.config = {
-      host: process.env.DATABASE_HOST || config.host,
-      user: process.env.DATABASE_USERNAME || config.username,
-      password: process.env.DATABASE_PASSWORD || config.password,
-      database: process.env.DATABASE_NAME || config.database,
+      host: 'localhost',
+      user: process.env.DATABASE_USERNAME || 'root',
+      password: process.env.DATABASE_PASSWORD || '',
+      database: process.env.DATABASE_NAME || 'ha_advanced',
     };
 
     return this;
