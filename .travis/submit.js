@@ -28,7 +28,7 @@ exec(
       ps = JSON.parse(resultServer)
     }
     catch {
-      ps = {}
+      ps = { stats: {} }
     }
 
     try {
@@ -38,7 +38,7 @@ exec(
       pc = JSON.parse(resultClient)
     }
     catch {
-      pc = {}
+      pc = { stats: {} }
     }
 
     let result = {
