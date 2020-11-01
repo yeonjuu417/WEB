@@ -12,7 +12,7 @@ class App extends React.Component {
     userinfo: null,
   };
 
-  handleIsLoginChange() {
+  handleResponseSuccess() {
     // TODO: 이제 인증은 성공했습니다. 사용자 정보를 호출하고, 이에 성공하면 로그인 상태를 바꿉시다.
   }
 
@@ -25,7 +25,7 @@ class App extends React.Component {
           <Route
             path='/login'
             render={() => (
-              <Login handleIsLoginChange={this.handleIsLoginChange.bind(this)} />
+              <Login handleResponseSuccess={this.handleResponseSuccess.bind(this)} />
             )}
           />
           <Route exact path='/signup' render={() => <Signup />} />

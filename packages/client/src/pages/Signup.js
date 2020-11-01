@@ -11,6 +11,7 @@ class Signup extends React.Component {
       password: "",
       username: "",
       mobile: "",
+      errorMessage: ""
     };
     this.handleInputValue = this.handleInputValue.bind(this);
   }
@@ -20,11 +21,13 @@ class Signup extends React.Component {
   };
 
   handleSignup = () => {
-    // TODO : 서버에 회원가입을 요청 후 로그인 페이지로 이동 하세요.
-    // 회원 가입 성공 후 로그인 페이지 이동은 다음 코드를 이용하세요
-    // 
-    // this.props.history.push("/");
-    
+    // TODO : 서버에 회원가입을 요청 후 로그인 페이지로 이동하세요.
+    //        회원가입 성공 후 로그인 페이지 이동은 다음 코드를 이용하세요.
+    //
+    //        this.props.history.push("/");
+    //
+    // TODO : 모든 항목을 입력하지 않았을 경우 에러를 표시해야 합니다.
+
   }
 
   render() {
@@ -72,6 +75,7 @@ class Signup extends React.Component {
             >
               회원가입
             </button>
+            {/* TODO : 조건에 따라 에러메시지를 표시하세요. */ <div className="alert-box"></div>}
           </form>
         </center>
       </div>
